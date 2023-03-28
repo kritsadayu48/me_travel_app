@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:me_travel_app/views/register_ui.dart';
 
 class LoginUI extends StatefulWidget {
   const LoginUI({super.key});
@@ -138,7 +139,14 @@ class _LoginUIState extends State<LoginUI> {
                 height: MediaQuery.of(context).size.width * 0.05,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RegisterUI(),
+                    ),
+                  );
+                },
                 child: Text(
                   'ลงชื่อเข้าใช้งาน',
                   style: GoogleFonts.kanit(),
