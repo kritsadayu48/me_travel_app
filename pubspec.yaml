@@ -36,10 +36,12 @@ dependencies:
   url_launcher: ^6.1.10
   google_maps_flutter: ^2.2.5
   shared_preferences: ^2.0.18
-  image_picker: ^0.8.7
+  image_picker: ^0.8.7 #ใช้เลือกรูปถ่ายจากGallery หรือจากกล้องถ่ายรูปผ่าน Camera 
   geolocator: ^9.0.2
   intl: ^0.18.0
-
+  path_provider: ^2.0.14 #ใช้เพื่ออ้างอิง Path/Directory (ที่อยู่ของไฟล์/โฟล์เดอร์)
+  uuid: ^3.0.7 #ใช้สร้างอักขระหรือข้อความที่ไม่ซ้ำกัน
+  sqflite: ^2.2.6 #ใช้เพื่อเชียนโค้ดทำงานกับ Database: Sqlite ในอุปกรณ์ Mobile (ios/Android)
 
 
 
