@@ -1,8 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:me_travel_app/%E0%B8%B5utils/db_helper.dart';
+import 'package:me_travel_app/models/user.dart';
 import 'package:me_travel_app/views/register_ui.dart';
+import 'package:me_travel_app/views/travel_home_ui.dart';
 
 class LoginUI extends StatefulWidget {
   const LoginUI({super.key});
@@ -12,6 +17,67 @@ class LoginUI extends StatefulWidget {
 }
 
 class _LoginUIState extends State<LoginUI> {
+  //สร้างตัวแปร(ตัว Controller) ไว้เก็บค่าจาก TextField
+  TextEditingController usernameCtrl = TextEditingController(text: '');
+  TextEditingController passwordCtrl = TextEditingController(text: '');
+
+
+bool isShowPassword = false;
+
+   showWarningDialog(BuildContext context, String msg) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            'คำเตือน',
+            style: GoogleFonts.kanit(),
+          ),
+          content: Text(
+            msg,
+            style: GoogleFonts.kanit(),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'OK',
+                style: GoogleFonts.kanit(),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+
+//สร้างเมธตอด checkSigin เพื่อตรวจสอบ usernam และ password 
+checkSigin(BuildContext context) async {
+  //ตรวจสอบว่า username และ password มีในฐานข้อมูลหรือไม่
+  //โดยจะเก็บผลลัพธ์ไว้ในตัวแปร
+  User? user = await DBHelper.signinUser(
+    usernameCtrl.text,
+    passwordCtrl.text,
+  );
+  //ถ้าUser เป็น null แสดวงส่า username หรือ password ไม่ถูกต้อง
+  if (user == null) {
+    //แสดงว่า Dialog เตือน แปลว่า username/password ไม่ถูกต้อง
+    showWarningDialog(context, 'username/password ไม่ถูกต้อง');
+  } else {
+    //แปลว่า  user/password ถูกต้องเปิดไปหน้า TravelHomeUI 
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TravelHomeUI(user: user),
+      )
+    );
+  }
+}
+ 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +130,10 @@ class _LoginUIState extends State<LoginUI> {
                   left: MediaQuery.of(context).size.width * 0.15,
                   right: MediaQuery.of(context).size.width * 0.15,
                 ),
-                child: TextField(),
+                child: TextField(
+                  controller: usernameCtrl,
+                  style: GoogleFonts.kanit(),
+                ),
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.width * 0.1,
@@ -90,14 +159,26 @@ class _LoginUIState extends State<LoginUI> {
                   right: MediaQuery.of(context).size.width * 0.15,
                 ),
                 child: TextField(
-                  obscureText: true,
+                  controller: passwordCtrl,
+                  style: GoogleFonts.kanit(),
+                  obscureText: !isShowPassword,
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
+                      onPressed: () {
+                        setState(() {
+                          isShowPassword = !isShowPassword;
+                        });
+                      },
+                      icon: isShowPassword == true
+                      ? Icon(
+                        Icons.visibility,
+                        color: Colors.blue,
+                      )
+                      : Icon(
                         Icons.visibility_off,
-                        color: Colors.blueGrey,
-                      ),
+                        color:  Colors.blue,
+                      )
+                      
                     ),
                   ),
                 ),
@@ -106,7 +187,16 @@ class _LoginUIState extends State<LoginUI> {
                 height: MediaQuery.of(context).size.width * 0.08,
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (usernameCtrl.text.isEmpty) {
+                    showWarningDialog(context, 'กรุณากรอกชื่อผู้ใช้');
+                  }else if (passwordCtrl.text.isEmpty) {
+                    showWarningDialog(context, 'กรุณากรอกรหัสผ่าน');
+                  }else{
+                    checkSigin(context);
+                  }
+                },
+                //validate ค่าที่รับมาจาก TextField ว่าว่างหรือไม่
                 child: Text(
                   'SIGN IN',
                   style: GoogleFonts.kanit(),

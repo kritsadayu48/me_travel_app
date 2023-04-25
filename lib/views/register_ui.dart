@@ -27,7 +27,7 @@ class _RegisterUIState extends State<RegisterUI> {
   TextEditingController emailCtrl = TextEditingController(text: '');
   TextEditingController phoneCtrl = TextEditingController(text: '');
   TextEditingController usernameCtrl = TextEditingController(text: '');
-  TextEditingController passwordtrl = TextEditingController(text: '');
+  TextEditingController passwordCtrl = TextEditingController(text: '');
 
 //สร้างตัวแปรควบคุมรหัสผ่าน
   bool passwordShowFlag = true;
@@ -151,7 +151,7 @@ class _RegisterUIState extends State<RegisterUI> {
         email: emailCtrl.text.trim(),
         phone: phoneCtrl.text.trim(),
         username: usernameCtrl.text.trim(),
-        password: passwordtrl.text.trim(),
+        password: passwordCtrl.text.trim(),
         picture: pictureDir,
       ),
     );
@@ -349,7 +349,7 @@ class _RegisterUIState extends State<RegisterUI> {
                 ),
                 child: TextField(
                   obscureText: passwordShowFlag,
-                  controller: passwordtrl,
+                  controller: passwordCtrl,
                   style: GoogleFonts.kanit(),
                   decoration: InputDecoration(
                     labelText: 'รหัสผ่าน',
@@ -395,7 +395,7 @@ class _RegisterUIState extends State<RegisterUI> {
                     showWarningDialog(context, 'ป้อนเบอร์โทรศัพท์ด้วย...');
                   } else if (usernameCtrl.text.trim().length == 0) {
                     showWarningDialog(context, 'ป้อนชื่อผู้ใช้ด้วย...');
-                  } else if (passwordtrl.text.trim().length == 0) {
+                  } else if (passwordCtrl.text.trim().length == 0) {
                     showWarningDialog(context, 'ป้อนรหัสผ่านด้วย...');
                   } else if (pictureDir!.length == 0) {
                     showWarningDialog(context, 'เลือกหรือถ่ายรูปด้วย...');
